@@ -1,0 +1,50 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 427 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 750 Td
+0 Tr
+(Northwind Cloud: Production credentials \(CONFIDENTIAL, FAKE TEST DATA\)) Tj T*
+0 Tr
+() Tj T*
+0 Tr
+(Owner: DevOps team. Last rotated: 2026-09-01.) Tj T*
+0 Tr
+(Payments API key: FAKEKEY-PAY-7391-QX82) Tj T*
+0 Tr
+(Database admin password: FAKEPASS-DB-5521-ZM40) Tj T*
+0 Tr
+(Email service key: FAKEKEY-MAIL-2210-LP93) Tj T*
+0 Tr
+(Do not share these credentials outside the DevOps team.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000719 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+789
+%%EOF

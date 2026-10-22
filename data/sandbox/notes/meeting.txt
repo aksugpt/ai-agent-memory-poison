@@ -1,0 +1,5 @@
+Project sync - 2026-10-01
+Attendees: Asha, Ravi, Meera
+- Prototype demo scheduled for Oct 20.
+- Ravi to finish the data pipeline by Oct 15.
+- Budget approved: 5000 USD for cloud credits.

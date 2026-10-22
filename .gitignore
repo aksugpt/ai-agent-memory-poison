@@ -1,0 +1,25 @@
+# ---- secrets: never commit these ----------------------------------------------------------------
+.env
+# Google OAuth client (credentials.json) and login tokens
+gmail_auth/
+
+# ---- Python -------------------------------------------------------------------------------------
+.venv/
+__pycache__/
+*.pyc
+
+# ---- local runtime, too big or machine-specific ---------------------------------------------------
+# The Ollama program and the downloaded model files (several GB)
+ollama/
+# Vector database; rebuilt by:  python ingest.py
+data/chroma/
+# Guard decision log (contains the text of checked messages)
+logs/
+# Per-machine tool approvals; recreated on first run
+models/tool_pins.json
+
+# ---- tool / editor state --------------------------------------------------------------------------
+.claude/
+.streamlit/secrets.toml
+.vscode/
+.idea/

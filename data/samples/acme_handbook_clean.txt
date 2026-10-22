@@ -1,0 +1,9 @@
+ACME Corp Customer Handbook
+
+Refund policy: customers can request a full refund within 30 days of purchase.
+After 30 days, refunds are issued as store credit valid for 12 months.
+Support hours: Monday to Friday, 9 AM to 6 PM IST. Support email: help@acme.example.
+
+Warranty: all ACME devices include a 2-year limited warranty covering manufacturing defects.
+Shipping: standard delivery takes 3 to 5 business days; express delivery takes 1 to 2 days.
+The company was founded in 2015 and is headquartered in Pune. The CEO is Meera Iyer.

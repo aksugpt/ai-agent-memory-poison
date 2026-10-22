@@ -1,0 +1,3 @@
+# Keep these byte-for-byte (git must not rewrite line endings in them)
+*.pdf binary
+*.joblib binary

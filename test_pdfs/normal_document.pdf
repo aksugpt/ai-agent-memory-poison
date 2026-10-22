@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 566 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 750 Td
+0 Tr
+(Northwind Staff Handbook: Leave and Travel Policy) Tj T*
+0 Tr
+() Tj T*
+0 Tr
+(Annual leave: every full-time employee receives 24 days of paid annual leave per calendar year.) Tj T*
+0 Tr
+(Up to 5 unused days can be carried over to the next year; the rest expire on 31 March.) Tj T*
+0 Tr
+(Sick leave: 10 paid sick days per year. A medical certificate is required for absences longer than 2 days.) Tj T*
+0 Tr
+(Leave requests of more than 3 consecutive days need written approval from your manager at least 14 days in advance.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+6 0 obj
+<< /Length 578 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 750 Td
+0 Tr
+(Travel: hotel stays are reimbursed up to 4,500 INR per night in metro cities and 3,000 INR elsewhere.) Tj T*
+0 Tr
+(Flights must be booked at least 7 days ahead in economy class; business class needs director approval.) Tj T*
+0 Tr
+(Submit expense claims within 30 days of returning, using the Northwind Expense portal.) Tj T*
+0 Tr
+(IT: laptops are refreshed every 3 years. The IT helpdesk is on extension 4400, open 8 AM to 8 PM on weekdays.) Tj T*
+0 Tr
+(Questions about this policy can be sent to the HR team at hr@northwind.example.) Tj T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000864 00000 n 
+0000000990 00000 n 
+0000001619 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1689
+%%EOF

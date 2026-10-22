@@ -1,0 +1,12 @@
+langchain
+langchain-groq
+langchain-ollama
+chromadb
+python-dotenv
+scikit-learn
+joblib
+streamlit
+fastmcp
+pypdf
+google-api-python-client
+google-auth-oauthlib

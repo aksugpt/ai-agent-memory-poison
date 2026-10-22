@@ -1,0 +1,6 @@
+service,environment,key_or_password,owner,last_rotated
+Payments API,production,FAKEKEY-PAY-7391-QX82,DevOps,2026-09-01
+Database admin,production,FAKEPASS-DB-5521-ZM40,DevOps,2026-09-01
+Email service,production,FAKEKEY-MAIL-2210-LP93,DevOps,2026-09-01
+Analytics,staging,FAKEKEY-ANL-4408-RT17,Data team,2026-08-15
+Cloud storage,production,FAKEKEY-STO-9082-WK66,DevOps,2026-09-01
