@@ -71,6 +71,9 @@ class Guard:
         # Content the guard withheld from the model while a question was being answered (see guard/wrap.py);
         # a UI collects these to show what was removed. Each entry: origin, source, label, content.
         self.removals: list[dict] = []
+        # The user's own latest message, set once per turn (see guard/wrap.py, WRITE_TOOLS): a write tool
+        # may only act on a file this message names, so a hidden instruction elsewhere cannot trigger one.
+        self.current_question: str = ""
 
     def _score_window(self, text: str) -> tuple[float, str, float, float, list[str], float]:
         """Score one piece of text with both layers. Returns (score, label, rule_score, ml_score, reasons, ml_top)."""

@@ -126,6 +126,27 @@ def list_uploaded_documents() -> dict[str, int]:
     return counts
 
 
+# ---- editing an uploaded file (agent-facing write tools; see mcp_server_docs.py) ---------------------
+def update_document(filename: str, new_text: str) -> str:
+    """Replace one already-uploaded file's indexed text with new_text (re-chunked the same way as an
+    upload). Only edits a file that is already in the index; it never creates a new one."""
+    if filename not in list_uploaded_documents():
+        return f"Error: no uploaded file named '{filename}' is indexed."
+    from uploads import chunks_for  # imported here, like the chromadb import above, to keep other tools fast to start
+
+    chunks = chunks_for(filename, [(1, new_text)])
+    n = add_uploaded_document(filename, [(c.idx, c.page, c.text) for c in chunks])
+    return f"Updated '{filename}': {n} passage(s) now indexed."
+
+
+def delete_document(filename: str) -> str:
+    """Remove one uploaded file from the index."""
+    if filename not in list_uploaded_documents():
+        return f"Error: no uploaded file named '{filename}' is indexed."
+    remove_uploaded_document(filename)
+    return f"Deleted '{filename}' from the index."
+
+
 # ---- search -----------------------------------------------------------------------------------
 def _mentions_upload(query: str, filenames) -> bool:
     """True if the query names one of the uploaded files (by file name or by its name without extension)."""

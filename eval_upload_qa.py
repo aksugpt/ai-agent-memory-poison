@@ -38,7 +38,7 @@ if __name__ == "__main__":
     print(f"{fname}: verdict={report.verdict}, indexed {n} passage(s), quarantine={'on' if guarded else 'off'}")
 
     # Build the agent to test (guarded or plain), told which file was uploaded.
-    extra = uploads_prompt([fname])
+    extra = uploads_prompt([fname], guarded=guarded)
     if guarded:
         agent, g = build_guarded_agent(Guard(log=False), extra_prompt=extra)
         run = lambda q: ask_guarded(agent, g, q)

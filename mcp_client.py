@@ -22,6 +22,7 @@ import config
 # The trusted tool server, the read-only Gmail server, and the deliberately malicious one used for tool-poisoning tests.
 SERVER_SCRIPT = config.ROOT / "mcp_server.py"
 EMAIL_SCRIPT = config.ROOT / "mcp_server_email.py"
+WRITE_SCRIPT = config.ROOT / "mcp_server_docs.py"
 POISONED_SCRIPT = config.ROOT / "mcp_server_poisoned.py"
 # Seconds to wait for a server to start / for one tool call to finish.
 CONNECT_TIMEOUT = 90

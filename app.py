@@ -13,13 +13,13 @@ import streamlit as st
 
 import config
 import context_meter
-from agent import build_agent, email_prompt, uploads_prompt
+from agent import build_agent, email_prompt, uploads_prompt, write_prompt
 from agent_guarded import build_guarded_agent, clean_answer
 from guard import Guard
 from guard.docscan import LABEL_TEXT, scan_chunks
 from guard.toolscan import blocked_tool_for_prompt, friendly_block_message
 from guard.wrap import check_user_input
-from mcp_client import EMAIL_SCRIPT, POISONED_SCRIPT, SERVER_SCRIPT, get_bridge
+from mcp_client import EMAIL_SCRIPT, POISONED_SCRIPT, SERVER_SCRIPT, WRITE_SCRIPT, get_bridge
 from tools.rag_tool import add_uploaded_document, clear_uploaded_documents, ingest_documents, remove_uploaded_document
 from uploads import SUPPORTED, UploadError, chunks_for, extract_pages
 
@@ -145,6 +145,7 @@ def init_state() -> None:
     ss.setdefault("guard_on", True)         # the "Guard enabled" switch
     ss.setdefault("untrusted_server", False)  # the "Connect untrusted MCP server" switch
     ss.setdefault("email_on", False)        # the "Connect Gmail" switch
+    ss.setdefault("write_on", False)        # the "Allow document edits" switch (update_document / delete_document)
     ss.setdefault("pending", None)          # a question waiting to be sent on the next run
     ss.setdefault("removed_log", [])        # things the guard withheld during chat turns (shown in the right panel)
     if "docs" not in ss:  # uploaded documents of THIS session; start from an empty index
@@ -157,10 +158,11 @@ def init_state() -> None:
 
 
 def mcp_servers() -> list:
-    """The tool servers to connect: the trusted one, Gmail if switched on, and the malicious test server if switched on.
-    Earlier servers are trusted more, so the untrusted one always comes last."""
+    """The tool servers to connect: the trusted one, Gmail and/or the document-edit tools if switched on, and the
+    malicious test server if switched on. Earlier servers are trusted more, so the untrusted one always comes last."""
     ss = st.session_state
-    return [SERVER_SCRIPT] + ([EMAIL_SCRIPT] if ss.email_on else []) + ([UNTRUSTED_SERVER] if ss.untrusted_server else [])
+    return ([SERVER_SCRIPT] + ([EMAIL_SCRIPT] if ss.email_on else []) + ([WRITE_SCRIPT] if ss.write_on else [])
+            + ([UNTRUSTED_SERVER] if ss.untrusted_server else []))
 
 
 def reset_agents() -> None:
@@ -171,9 +173,12 @@ def reset_agents() -> None:
 def get_agent(guarded: bool):
     """Return the agent for the current settings, building it the first time it is needed."""
     ss = st.session_state
-    extra = uploads_prompt([n for n, d in ss.docs.items() if d["n_indexed"]])  # tells the model which files exist
+    # Guarded/unguarded picks a different prompt too: "guard off" must be a genuinely undefended agent,
+    # not just unwrapped tools, so the prompt-level "treat this as untrusted" guidance only applies when guarded.
+    extra = uploads_prompt([n for n, d in ss.docs.items() if d["n_indexed"]], guarded=guarded)
     extra += email_prompt() if ss.email_on else ""  # and that it can read the inbox
-    key = f"{'guarded' if guarded else 'plain'}-{ss.untrusted_server}-{ss.email_on}-{hash(extra)}"
+    extra += write_prompt(guarded=guarded) if ss.write_on else ""  # and that it can edit/delete an uploaded file
+    key = f"{'guarded' if guarded else 'plain'}-{ss.untrusted_server}-{ss.email_on}-{ss.write_on}-{hash(extra)}"
     if key not in ss.agents:
         if guarded:
             ss.agents[key] = build_guarded_agent(ss.guard, servers=mcp_servers(), extra_prompt=extra)[0]
@@ -533,6 +538,7 @@ def run_turn(prompt: str) -> None:
             pass  # a model/server problem is reported below, when the agent is actually used
     ss.guard.events.clear()
     ss.guard.removals.clear()
+    ss.guard.current_question = prompt  # a write tool may only touch a file this message names
 
     reply = {"role": "assistant", "content": "", "guarded": guarded, "blocked": False, "steps": [], "events": []}
     usage = None  # token counts of the model's last call in this turn (it has seen everything by then)
@@ -736,6 +742,20 @@ with st.sidebar:
         except Exception as e:
             st.markdown("🔴 Gmail not connected")
             st.caption("Log in once with `python gmail_login.py read`. " + str(e)[:150])
+
+    # ---- the document-edit tools (write access: update_document / delete_document) ----
+    st.divider()
+    st.markdown("**✏️ Document edits (test)**")
+    st.toggle("Allow document edits", key="write_on", on_change=reset_agents,
+              help="Gives the agent update_document and delete_document for an uploaded file. With the guard "
+                   "on, a call is only allowed when your OWN message names that file; with the guard off, a "
+                   "hidden instruction elsewhere can also trigger one, so you can test the difference.")
+    if ss.write_on:
+        try:
+            st.caption("Tools served: " + ", ".join(f"`{t.name}`" for t in get_bridge(WRITE_SCRIPT).tools))
+        except Exception as e:
+            st.markdown("🔴 MCP server not reachable")
+            st.caption(str(e)[:200])
 
 
 # ================================================================================================

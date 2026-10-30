@@ -63,7 +63,7 @@ def run(scen: dict, guard_on: bool, files, trials: int) -> list[tuple[str, str, 
     """Index the files, build the agent (guarded or plain), ask both questions, and judge each answer."""
     guard = Guard(log=False)
     index_files(scen, files, guard_on, guard)
-    extra = uploads_prompt(files)  # tells the agent which files were uploaded
+    extra = uploads_prompt(files, guarded=guard_on)  # tells the agent which files were uploaded
     if guard_on:
         agent, g = build_guarded_agent(Guard(log=False), extra_prompt=extra)
         answer = lambda q: ask_guarded(agent, g, q)

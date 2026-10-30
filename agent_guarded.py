@@ -50,6 +50,7 @@ def clean_answer(guard: Guard, answer: str) -> str:
 
 def ask_guarded(agent, guard: Guard, question: str) -> str:
     """Ask a question with all checks: refuse bad input first, then explain removed tools, then answer."""
+    guard.current_question = question  # a write tool may only touch a file this message names
     refusal = check_user_input(question, guard)
     if refusal:
         return refusal  # the LLM is never called

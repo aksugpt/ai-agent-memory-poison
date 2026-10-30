@@ -20,6 +20,9 @@ _EMAIL_HEADER = re.compile(
 )
 # Email tools: their text comes from strangers, so a blocked passage is cleaned sentence by sentence, not thrown away.
 EMAIL_TOOLS = {"list_emails", "read_email", "read_attachment"}
+# Write tools (mcp_server_docs.py): these change or remove data, so the guard requires the user's OWN message
+# to have named the file being touched -- a hidden instruction elsewhere cannot trigger one on its own.
+WRITE_TOOLS = {"update_document", "delete_document"}
 
 
 def _names(d: Decision) -> str:
@@ -127,6 +130,15 @@ def _filter_output(output: str, guard: Guard, sanitize: bool = False) -> str:
     return text
 
 
+def _user_named_file(message: str, filename: str) -> bool:
+    """True if the user's own message names this file, by its full name or by its name without extension."""
+    if not filename:
+        return False
+    msg = (message or "").lower()
+    stem = filename.rsplit(".", 1)[0].lower()
+    return filename.lower() in msg or (len(stem) >= 3 and stem in msg)
+
+
 def guard_tool(tool, guard: Guard) -> StructuredTool:
     """Return a copy of `tool` whose arguments and output are checked by `guard`."""
 
@@ -137,6 +149,15 @@ def guard_tool(tool, guard: Guard) -> StructuredTool:
         if d.blocked:
             _record_removal(guard, tool.name, "tool call by the AI", d.label, call_text)
             return f"[BLOCKED tool call: {d.label}] {_names(d)}. {NO_GUESS}"
+        # A write tool may only touch a file the user's own message named -- not one named only by a
+        # document, email or other tool result the model happened to read.
+        if tool.name in WRITE_TOOLS:
+            filename = str(kwargs.get("filename", ""))
+            if not _user_named_file(guard.current_question, filename):
+                _record_removal(guard, filename or tool.name, "tool call by the AI (not requested by the user)",
+                                "unauthorized_write", call_text)
+                return (f"[BLOCKED tool call: unauthorized_write] your own last message did not name "
+                        f"'{filename}'. Tell the user you can only change or delete a file they name themselves.")
         # Run the real tool, then check what it returned.
         return _filter_output(str(tool.func(**kwargs)), guard, sanitize=tool.name in EMAIL_TOOLS)
 
