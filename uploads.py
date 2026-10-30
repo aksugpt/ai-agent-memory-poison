@@ -37,13 +37,15 @@ def csv_to_text(text: str) -> str:
     Every cell is kept, so text hidden in any cell (a 'notes' column, for example) is extracted and scanned.
     """
     # Work out the delimiter (comma, semicolon, tab or pipe); fall back to a normal comma CSV.
+    # Only the delimiter is taken from the sniffer: its quoting guess is unreliable (it can turn off the
+    # standard "" escape and split one quoted cell into several), so quoting follows the normal Excel rules.
     try:
-        dialect = csv.Sniffer().sniff(text[:4096], delimiters=",;\t|")
+        delimiter = csv.Sniffer().sniff(text[:4096], delimiters=",;\t|").delimiter
     except csv.Error:
-        dialect = csv.excel
+        delimiter = ","
     # Read the rows, skipping blank ones and stopping at the row limit.
     rows = []
-    for row in csv.reader(io.StringIO(text), dialect):
+    for row in csv.reader(io.StringIO(text), delimiter=delimiter):
         if any(c.strip() for c in row):
             rows.append([" ".join(c.split()) for c in row])  # a cell with line breaks must stay on one line
         if len(rows) > MAX_CSV_ROWS:
